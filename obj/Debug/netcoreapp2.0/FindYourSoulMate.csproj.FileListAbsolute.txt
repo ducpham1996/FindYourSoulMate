@@ -3,9 +3,9 @@ C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\bin\Debug\netcoreap
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\bin\Debug\netcoreapp2.0\FindYourSoulMate.runtimeconfig.dev.json
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\bin\Debug\netcoreapp2.0\FindYourSoulMate.dll
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\bin\Debug\netcoreapp2.0\FindYourSoulMate.pdb
-C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.csprojAssemblyReference.cache
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.csproj.CoreCompileInputs.cache
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.AssemblyInfoInputs.cache
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.AssemblyInfo.cs
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.dll
 C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.pdb
+C:\Users\Ducc\source\repos\FindYourSoulMate\FindYourSoulMate\obj\Debug\netcoreapp2.0\FindYourSoulMate.csprojAssemblyReference.cache

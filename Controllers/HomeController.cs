@@ -12,8 +12,6 @@ namespace FindYourSoulMate.Controllers
     {
         public IActionResult Index()
         {
-            DataContext dataContext = new DataContext();
-            dataContext.testConnectionAsync();
             return View();
         }
 

@@ -1,0 +1,353 @@
+﻿@model IEnumerable<FindYourSoulMate.Models.Post>
+@using FindYourSoulMate.Models.Manager;
+@using FindYourSoulMate.Models.Entities;
+
+@{
+    ViewData["Title"] = "Index";
+    RelativeDateTime relativeDateTime = new RelativeDateTime();
+    CommentManagement cm = new CommentManagement();
+    PostLikeManagement plm = new PostLikeManagement();
+    Helper _helper = new Helper();
+    UserManagement userManagement = new UserManagement();
+    Owner user = userManagement.GetUser_Session(Context.Request);
+}
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script src="~/js/faceMocion.js"></script>
+<link rel="stylesheet" href="~/css/faceMocion.css" />
+<link rel="stylesheet" href="~/css/comments.css" />
+<link rel="stylesheet" href="~/css/images-grid.css" />
+<link rel="stylesheet" href="~/css/modal.css" />
+<script src="~/js/posts.js"></script>
+<h2>Index</h2>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="container-fluid">
+    <script>
+        $(".otro").faceMocion();</script>
+    <div class="row">
+        @{
+            string encrypted_id = "";
+            string encrypted_comment_id = "";
+            string encrypted_sub_comment_id = "";
+            int total_comments = 0;
+        }
+        <div class="col-sm-6 col-sm-push-3">
+            @foreach (var item in Model)
+            {
+                encrypted_id = _helper.EncodeTo64(item._id.ToString());
+
+                <div>
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="@item.owner.user_picture" height="70" width="70" alt="@item.owner.user_name">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="margin-t-0"><a href="@item.owner._id">@item.owner.user_name</a></h4>
+                            <p><span class="glyphicon glyphicon-time"></span> @relativeDateTime.getRelativeTime(item.date_created)</p>
+                        </div>
+                        <div class="media-right">
+                            <a href=""><i class="fa fa-edit"></i></a>
+                            <a href=""><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <!-- Image -->
+                    <figure class="margin-b-2">
+                        @if (item.video_image.Count > 5)
+                        {
+                            <div id="gallery1" class="imgs-grid imgs-grid-5">
+                                @foreach (VideoImage file in item.video_image.Take(4))
+                                {
+
+                                    <div class="imgs-grid-image">
+                                        <div class="image-wrap">
+                                            @if (file.type.Equals(".mp4"))
+                                            {
+                                                <video class="img-responsive" src="@file.link" onclick="openModal();onViewSubPost('@_helper.EncodeTo64(file._id)','@encrypted_id')"></video>
+                                            }
+                                            else
+                                            {
+                                                <img src="@file.link" alt="" title="" onclick="openModal();onViewSubPost('@_helper.EncodeTo64(file._id)','@encrypted_id')">
+
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                <div class="imgs-grid-image">
+                                    <div class="image-wrap">
+                                        @if (item.video_image[4].type.Equals(".mp4"))
+                                        {
+                                            <video class="img-responsive" src="@item.video_image[4].link" onclick="openModal()"></video>
+                                        }
+                                        else
+                                        {
+                                            <img src="@item.video_image[4].link" alt="" title="" onclick="openModal()">
+
+                                        }
+                                        <div class="view-all"><span class="view-all-cover"></span><span onclick="openModal();onViewSubPost('@_helper.EncodeTo64(item.video_image[4]._id)','@encrypted_id')" class="view-all-text">View all @item.video_image.Count images</span></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="gallery1" class="imgs-grid imgs-grid-@item.video_image.Count">
+
+                                @foreach (VideoImage file in item.video_image)
+                                {
+                                    <div class="imgs-grid-image">
+                                        <div class="image-wrap">
+                                            @if (file.type.Equals(".mp4"))
+                                            {
+                                                <video class="img-responsive" src="@file.link" onclick="openModal();onViewSubPost('@_helper.EncodeTo64(file._id)','@encrypted_id')" autoplay muted></video>
+                                            }
+                                            else
+                                            {
+                                                <img src="@file.link" alt="" title="" onclick="openModal();onViewSubPost('@_helper.EncodeTo64(file._id)','@encrypted_id')">
+
+                                            }
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                        }
+                        <figcaption class="margin-t-h"></figcaption>
+                    </figure>
+                    <p class="lead" style="word-wrap: break-word;white-space: pre-line;">@item.description</p>
+                    @item.like Like(s)
+                    <p class="pull-right">
+                        @{total_comments = item.comments + item.sub_comments;}
+                        @total_comments Comments
+                    </p>
+                    <form id="get_comment_form_@encrypted_id" action="/commment/GetComments" method="post">
+                        <input type="hidden" name="post_id" value="@encrypted_id" />
+                        <input id="no_of_comment_@encrypted_id" type="hidden" name="noOfcomment" value="@cm.noOfComment(item.comments)" />
+                        <input id="total_comment_@encrypted_id" type="hidden" value="@item.comments" />
+                    </form>
+
+                    <hr>
+
+                    <div class="row">
+                        <ul class="list-unstyled" style="text-align: center;">
+                            <li class="likebar">
+                                <div style="margin-left: 25px;width: 67px;">
+                                    @if (plm.has_like(item._id, new Like_Record { _id = user._id }))
+                                    {
+                                        string like = plm.get_like(item._id, user._id);
+                                        string like_icon = like + "20";
+                                        <script>
+                                            document.write(emoji_to_text('@encrypted_id', '@like','p'));
+                                        </script>
+                                    }
+                                    else
+                                    {
+                                        <a name="" id="post_@encrypted_id" href="javascript:onPostLike('@encrypted_id','like')" onmouseover="onChoseEmoji(event,'@encrypted_id','p')">
+                                            <i class="glyphicon glyphicon-thumbs-up"></i> Like
+                                        </a>
+                                    }
+                                </div>
+                            </li>
+                            <li class="likebar"><a id="on_click_@encrypted_id" href="javascript:getComments('@encrypted_id')"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                            <li class="likebar"><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>
+                        </ul>
+                    </div>
+                    <hr />
+                    <!-- Comments -->
+                    <h3>Comments</h3>
+                    <div class="row">
+                        <div class="comments-container">
+                            <ul id="comments-list-@encrypted_id" class="comments-list"></ul>
+                            <ul class="comments-list">
+                                <li>
+                                    <div class="media-left">
+                                        <div class="comment-avatar"><img src="@item.owner.user_picture" alt=""></div>
+                                    </div>
+                                    <div class="comment-box">
+                                        <form id="comment_form">
+                                            <input type="hidden" name="post_id" value="@encrypted_id" />
+                                            <textarea name="comment_text" onkeypress="return enter_submit_comment(this,event,'@encrypted_id')" required class="form-control" placeholder="What are you thinking?"></textarea>
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <h3>Leave a comment</h3>
+                    <p>Please keep in mind that comments are moderated and rel="nofollow" is in use. So, please do not use a spammy keyword or a domain as your name, or else it will be deleted. Thank you!</p>
+
+                    <div class="well" style="display:none">
+                        <form id="comment_form" action="/Comment/Create" method="post">
+                            <div class="form-group">
+                                <label for="contactName">Name</label>
+                                <input type="email" class="form-control" id="contactName" placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" class="form-control" id="contactEmail" placeholder="Enter email">
+                                <p class="help-block">Make sure you use a valid email address</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactComment">Comment</label>
+                                <input type="hidden" name="post_id" value="@encrypted_id" />
+                                <textarea class="form-control" required name="comment_text" id="contactComment" placeholder="What are you thinking?"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                    </div>
+                    <!-- Pager -->
+                    <nav>
+                        <ul class="pager">
+                            <li class="previous"><a href="#"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Older</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+        </div>
+        <div class="col-sm-3 col-sm-pull-6">
+            <!-- list group -->
+            <div class="list-group margin-b-3">
+                <a href="#" class="active list-group-item">Category 1</a>
+                <a href="#" class="list-group-item">Category 2</a>
+                <a href="#" class="list-group-item">Category 3</a>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-3">
+            <!-- Search -->
+            <div class="well">
+                <h4 class="margin-t-0">Search</h4>
+                <form action="#">
+                    <div class="input-group">
+                        <label class="sr-only" for="search-form">Search the site</label>
+                        <input type="text" class="form-control" id="search-form">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- list group -->
+            <div class="list-group margin-b-3">
+                <a href="#" class="active list-group-item">Category 1</a>
+                <a href="#" class="list-group-item">Category 2</a>
+                <a href="#" class="list-group-item">Category 3</a>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal">
+    <span class="close cursor" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+        <div class="col-sm-7">
+            <div class="mySlides" style="display:block">
+                @*<div class="numbertext">1 / 4</div>*@
+                <div id="modal_post_content"></div>
+            </div>
+            <a class="prev" id="prev" onclick="">&#10094;</a>
+            <a class="next" id="next" onclick="">&#10095;</a>
+
+            @*<div class="caption-container">
+                    <p id="caption"></p>
+                </div>*@
+
+            <div id="file_preview">
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="media-left">
+                <div class="media-left">
+                    <img id="owner_img" src="" height="70" width="70" alt="e">
+                </div>
+                <div class="media-body">
+                    <h4 class="margin-t-0"><a href="#" id="owner_name"></a></h4>
+                    <p id="creation_time"><span class="glyphicon glyphicon-time"></span> 2 days ago</p>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <ul class="list-unstyled" style="text-align: center;">
+                    <li class="col-sm-4"><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Like</a></li>
+                    <li class="col-sm-4"><a href="#"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
+                    <li class="col-sm-4"><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>
+                </ul>
+            </div>
+
+            <hr />
+            0 Like(s)
+            <p class="pull-right">
+                0 Comments
+            </p>
+            <hr />
+            <div class="comments-container">
+                <ul id="comments-list-" class="comments-list">
+                    <li>
+                        <div class="media-left">
+                            <div class="comment-avatar"><img src="~/img/636634657060408002.jpg" alt=""></div>
+                        </div>
+                        <div class="comment-box">
+                            <form id="comment_form">
+                                <input type="hidden" name="post_id" value="" />
+                                <textarea name="comment_text" onkeypress="return enter_submit_comment(this,event,'')" required class="form-control" placeholder="What are you thinking?"></textarea>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</div>

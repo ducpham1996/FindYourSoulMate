@@ -33,3 +33,10 @@
         display: none;
     }
 }
+.likebar{
+    width:33.3%;   
+    float:left;
+}
+.likebar a {
+    text-decoration: none;
+}

@@ -1,0 +1,149 @@
+.faceMocion {
+    display: none;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-left: 0px;
+    box-sizing: border-box;
+    background: white;
+    color: white;
+    position: absolute;
+    width: auto;
+    height: auto;
+    line-height: 25px;
+    border-radius: 50px;
+    transition: .25sease-in-out;
+    color: black;
+    border: 1px solid #eee;
+    -webkit-box-shadow: 4px 4px 21px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 4px 21px -9px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 21px -9px rgba(0,0,0,0.75);
+}
+
+    .faceMocion div {
+        margin-left: 8px;
+        float: left;
+        width: 34px;
+        height: 34px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-radius: 16px;
+    }
+
+.selectorFace {
+    margin-right: 8px;
+    float: left;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.faceMocion div:hover {
+    -webkit-transform: scale(1.25);
+    -moz-transform: scale(1.25);
+    -ms-transform: scale(1.25);
+    -o-transform: scale(1.25);
+    transform: scale(1.25);
+}
+
+.angry {
+    margin-left: 8px;
+    float: left;
+    width: 34px;
+    height: 34px;
+    background: url(../images/sqhTN9lgaY1.png) 0 0;
+}
+
+.scare {
+    background: url(../images/sqhTN9lgaY1.png) 0 -34px;
+}
+
+.haha {
+    background: url(../images/sqhTN9lgaY1.png) 0 -68px;
+}
+
+.like {
+    background: url(../images/sqhTN9lgaY1.png) 0 -102px;
+}
+
+.love {
+    background: url(../images/sqhTN9lgaY1.png) 0 -136px;
+}
+
+.sad {
+    background: url(../images/sqhTN9lgaY1.png) 0 -170px;
+}
+
+.suprise {
+    background: url(../images/sqhTN9lgaY1.png) 0 -204px;
+}
+
+.amaze {
+    background: url(../images/sqhTN9lgaY1.png) 0 -238px;
+}
+
+.MensajeTexto {
+    display: none;
+    position: absolute;
+    border: 1px solid #333;
+    background-color: #161616;
+    border-radius: 5px;
+    padding: 3px;
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+.IconoPequenio {
+    width: 24px;
+    height: 24px;
+    background-size: 24px;
+    background-repeat: no-repeat;
+}
+
+.selectorFace20 {
+    margin-right: 3px;
+    float: left;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 15px;
+}
+
+.angry20 {
+    float: left;
+    width: 20px;
+    height: 20px;
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 0;
+}
+
+.scare20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -20px;
+}
+
+.haha20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -40px;
+}
+
+.like20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -60px;
+}
+
+.love20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -80px;
+}
+
+.sad20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -100px;
+}
+
+.suprise20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -120px;
+}
+
+.amaze20 {
+    background: url(../images/sqhTN9lgaY1_size20px.png) 0 -140px;
+}
+

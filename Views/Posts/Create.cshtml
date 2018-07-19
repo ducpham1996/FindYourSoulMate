@@ -1,0 +1,105 @@
+﻿@model FindYourSoulMate.Models.Post
+
+@{
+    ViewData["Title"] = "Create";
+}
+<script src="~/js/dropzone.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.1/min/dropzone.min.css" rel="stylesheet">
+<script>
+    $(document).ready(function () {
+        $("#create_form").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "Post",
+                url: "/posts/create",
+                data: $("#create_form").serialize(),
+                success: function (response) {
+                    alert(response.message);
+                },
+                error: function (xhr, response, error) {
+                    if (xhr.status == 400) {                  
+                        var err = JSON.parse(xhr.responseText);
+                        alert(err.message);
+                    } else {
+                        $('#myModal').modal('show');
+                    }
+
+                }
+            });
+            return false;
+        });
+    });
+</script>
+<h2>Create</h2>
+
+<h4>Post</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="create_form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="title" class="control-label"></label>
+                <input asp-for="title" id="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="description" class="control-label"></label>
+                <input asp-for="description" id="des" class="form-control" />
+                <span asp-validation-for="description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Files</label>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" id="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+        <form id="dropzone" enctype="multipart/form-data" action="/posts/create" class="dropzone">
+            <div class="dropzone-previews"></div>
+            <div class="fallback">
+                <input name="files" id="files" type="file" multiple />
+            </div>
+        </form>
+        <button type="submit" id="submit-all" class="btn btn-primary btn-xs">Upload the file</button>
+        <script type="text/javascript">
+            Dropzone.options.dropzone = {
+                url: "/Posts/Create",
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                paramName: () => "files",
+                addRemoveLinks: true,
+                parallelUploads: 25,
+                maxFiles: 25,
+                acceptedFiles: 'application/jpeg, .jpg, .png, .gif ,.mp4',
+                init: function () {
+                    var myDropzone = this;
+                    $("#submit-all").click(function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        myDropzone.processQueue();
+                    });
+                    this.on("sendingmultiple", function (data, xhr, formData) {
+                        formData.append("title", $("#title").val());
+                        formData.append("description", $("#des").val());
+                    });
+                    this.on("successmultiple", function (files, response) {
+                        console.log(response);
+                    });
+                    this.on("errormultiple", function (files, response) {
+                        myDropzone.removeAllFiles();
+                    });
+                }
+            }
+        </script>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@Html.Partial("_Login")
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

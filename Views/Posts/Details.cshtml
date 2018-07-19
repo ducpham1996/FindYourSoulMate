@@ -1,0 +1,42 @@
+﻿@model FindYourSoulMate.Models.Post
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Post</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.date_created)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.date_created)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.likes)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.likes)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
