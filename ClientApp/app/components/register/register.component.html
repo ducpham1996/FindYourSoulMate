@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Registration Form</title>
+    <style>
+        .ng-valid[required], .ng-valid.required {
+            border-left: 5px solid #42A948;
+        }
+
+        .ng-invalid:not(form) {
+            border-left: 5px solid #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row" style="margin-top: 60px">
+            <div class="col-md-8">
+                <form id="register_form" enctype="multipart/form-data" (ngSubmit)="registeForm.form.valid && onRegister()" #registeForm="ngForm" novalidate>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !first_name.valid}">
+                        <label for="first_name" class="control-label">First Name*</label>
+                        <input id="first_name" name="first_name" #first_name="ngModel" [(ngModel)]="register.first_name" required class="form-control" placeholder="First Name" />
+                        <span *ngIf="registeForm.submitted && !first_name.valid" class="text-danger">First Name is required</span>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !last_name.valid}">
+                        <label for="last_name" class="control-label">Last Name*</label>
+                        <input id="last_name" name="last_name" #last_name="ngModel" [(ngModel)]="register.last_name" required class="form-control" placeholder="Last Name" />
+                        <span *ngIf="registeForm.submitted && !last_name.valid" class="text-danger">Last Name is required</span>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !birth_date.valid}">
+                        <label for="birth_date" class="control-label">Birth of Date*</label>
+                        <input type="date" name="birth_date" #birth_date="ngModel" [(ngModel)]="register.birth_date" id="birth_date" required class="form-control" />
+                        <span *ngIf="registeForm.submitted && !birth_date.valid" class="text-danger">Birth Date is required</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_img" class="control-label">Profile Image (Optional)</label>
+                        <input id="profile_img" type="file" accept="image/*" name="profile_img" (change)="onChange($event)" class="form-control" />
+                        <img id="thumbnail" src="{{this.file}}" height="auto" width="200" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Gender</label>
+                        <br>
+                        <input type="radio" name="gender" #gender="ngModel" [(ngModel)]="register.gender" class="gender" id="male"
+                               tabindex="2" placeholder="Gender" [value]="1" [checked]="register.gender == 1" title="Male">Male
+                        <input type="radio" name="gender" #gender="ngModel" [(ngModel)]="register.gender" class="gender"
+                               id="female" tabindex="2" placeholder="Gender" [value]="2" [checked]="register.gender == 2"
+                               title="Female"> Female
+                        <input type="radio"
+                               name="gender" #gender="ngModel" [(ngModel)]="register.gender" [checked]="register.gender == 3" class="gender" id="unknown" tabindex="2"
+                               placeholder="Gender" [value]="3" title="Unknown"> Unknown
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !phone_number.valid}">
+                        <label for="phone_number" class="control-label">Phone Number</label>
+                        <input id="phone_number" name="phone_number" class="form-control" #phone_number="ngModel" [(ngModel)]="register.phone_number" placeholder="Phone Number" />
+                        <span *ngIf="registeForm.submitted && !phone_number.valid" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !email.valid}">
+                        <label for="email" class="control-label">Email Address*</label>
+                        <input id="email" name="email" email="true" #email="ngModel" [(ngModel)]="register.email" (keyup)="onKeyUp(registeForm)" (keydown)="onKeyDown(registeForm)" required class="form-control" placeholder="Email" />
+                        <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+                            <div [hidden]="!email.errors.required">Email Address is required</div>
+                            <div [hidden]="!email.errors.email">Invalid Email Address</div>
+                            <div [hidden]="!email.errors.isExist">Email Address is already existed</div>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !password.valid}">
+                        <label for="password" class="control-label">Password*</label>
+                        <input type="password" id="password" name="password" min="10" maxlength="20" #password="ngModel" [(ngModel)]="register.password" required class="form-control" placeholder="Password" />
+                        <span *ngIf="registeForm.submitted && !password.valid" class="text-danger">Password is required</span>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': registeForm.submitted && !reenter_password.valid}">
+                        <label for="reenter_password" class="control-label">Reenter Password*</label>
+                        <input type="password" id="reenter_password" min="10" maxlength="20" (keyup)="onPassWordKeyUp(registeForm)" name="reenter_password" #reenter_password="ngModel" [(ngModel)]="register.reenter_password" required class="form-control" placeholder="Reenter password" />
+                        <span *ngIf="registeForm.submitted && !reenter_password.valid" class="text-danger">Reenter Password is required</span>
+                        <div *ngIf="reenter_password.invalid && (reenter_password.dirty || reenter_password.touched)" class="text-danger">
+                            <div [hidden]="!reenter_password.errors.required">Reenter Password is requiredd</div>
+                            <div [hidden]="!reenter_password.errors.isMatch">Reenter password does not match</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" [disabled]="!registeForm.form.valid" value="Register" class="btn btn-default" />
+                        <span class="text-success">{{this.message}}</span>
+                        <span class="text-danger">{{this.error}}</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+﻿<div class="row">
+    <ul class="list-unstyled" style="text-align: center;">
+        <li class="likebar">
+            <div style="margin-left: 25px;width: 75px;">
+                <a #icon *ngIf="tmp_post.has_like == 'none';else display_like" (mouseover)="onChoseEmoji($event,tmp_post._id)" (click)="postLike(tmp_post._id, icon.name)" name="none" class="" [innerHtml]="iconHtml | safeHtml" id="post_like_icon_{{tmp_post._id}}">
+                </a>
+                <ng-template #display_like>
+                    <a #icon id="post_like_icon_{{tmp_post._id}}" (mouseover)="onChoseEmoji($event,tmp_post._id)" (click)="postLike(tmp_post._id,icon.name)" name="{{tmp_post.has_like}}" class="Selector selectorFace20 {{tmp_post.has_like}}20" >
+                    <i></i>
+                    </a>
+                </ng-template>
+            </div>
+        </li>
+        <li class="likebar"><a (click)="!disableGetComment ? displayComments(): null"><i class="glyphicon glyphicon-comment"></i> Comment</a></li>
+        <li class="likebar"><a href="#"><i class="glyphicon glyphicon-share-alt"></i> Share</a></li>
+    </ul>
+    <div class="faceMocion" id="faceIconbar_{{tmp_post._id}}" (mouseleave)="onMouseOut($event,tmp_post._id)" style="margin-top:-90px;z-index: 1050; position: absolute; display: none;">
+        <div dato-descripcion="I like it" class="like" (click)="postLike(tmp_post._id,'like')"></div>
+        <div dato-descripcion="I love" class="love" (click)="postLike(tmp_post._id,'love')"></div>
+        <div dato-descripcion="It bothers me" class="angry" (click)="postLike(tmp_post._id,'angry')"> </div>
+        <div dato-descripcion="it scares" class="scare" (click)="postLike(tmp_post._id,'scare')"></div>
+        <div dato-descripcion="I enjoy" class="haha" (click)="postLike(tmp_post._id,'haha')"></div>
+        <div dato-descripcion="It saddens" class="sad" (click)="postLike(tmp_post._id,'sad')"></div>
+        <div dato-descripcion="It amazes me" class="amaze" (click)="postLike(tmp_post._id,'amaze')"></div>
+        <div dato-descripcion="I am glad" class="suprise" (click)="postLike(tmp_post._id,'suprise')"></div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+﻿<div class="row">
+    <div class="comments-container">
+        <ul class="comments-list" *ngIf="comments">
+            <li>
+                <a style="cursor:pointer" (click)="getComments()" *ngIf="noMoreCommentLeft">Load more comments</a><img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            </li>
+            <li *ngFor="let item of this.comments ; let i = index;">
+                <div class="comment-main-level">
+                    <div class="media-left">
+                        <div class="comment-avatar">
+                            <img src="{{item?.owner?.user_picture}}" alt="">
+                        </div>
+                    </div><div class="comment-box">
+                        <div class="comment-head">
+                            <div class="media-body">
+                                <h4 class="margin-t-0"><a>{{item?.owner?.user_name}}</a></h4><p><span class="glyphicon glyphicon-time"></span> {{item?.date_created | timeAgo}}</p>
+                            </div>
+                            <div class="media-right" *ngIf="item.is_own"><a (click)="showEditBox(i)"><i class="fa fa-edit"></i></a><a (click)="deleteComment(i)"><i class="fa fa-close"></i></a></div>
+                        </div>
+                        <div class="comment-content">
+                            <form>
+                                <textarea #edit_text id="edit_comment_form_{{item?._id}}" (keypress)="editComment($event,i,edit_text.value)" name="comment_text" style="display: none" class="form-control">{{item?.message}}</textarea>
+                            </form><p style="word-wrap: break-word;white-space: pre-line;" id="comment_text_{{item?._id}}">{{item?.message}}</p>
+                        </div>
+                        <div class="comment-content">
+                            <p style="float: left">
+                                <a #icon style="cursor:pointer" *ngIf="item.has_like == 'none';else display_like" (mouseover)="onChoseEmoji($event,item._id)" (click)="commentLike(item._id,icon.name)" name="none" class="" [innerHtml]="iconHTML | safeHtml" id="comment_like_icon_{{item._id}}">
+                                </a>
+                                <ng-template #display_like>
+                                    <a #icon id="comment_like_icon_{{item._id}}" (mouseover)="onChoseEmoji($event,item._id)" (click)="commentLike(item._id,icon.name)" name="{{item.has_like}}" class="Selector selectorFace20 {{item.has_like}}20">
+                                        <i></i>
+                                    </a>
+                                </ng-template>
+                                <a style="cursor:pointer" (click)="showReplyBox(item._id)">
+                                    <i class="glyphicon glyphicon-comment"></i> Reply
+                                </a>
+                            </p>
+                            <div class="faceMocion" id="faceIconbar_{{item._id}}"  (mouseleave)="onMouseOut($event,item._id)" style="z-index: 1050; position: absolute; display: none;">
+                                <div dato-descripcion="I like it" (click)="commentLike(item._id,'like')" class="like"></div>
+                                <div dato-descripcion="I love" (click)="commentLike(item._id,'love')" class="love"></div>
+                                <div dato-descripcion="It bothers me" (click)="commentLike(item._id,'angry')" class="angry"> </div>
+                                <div dato-descripcion="it scares" (click)="commentLike(item._id,'scare')" class="scare"></div>
+                                <div dato-descripcion="I enjoy" (click)="commentLike(item._id,'haha')" class="haha"></div>
+                                <div dato-descripcion="It saddens" (click)="commentLike(item._id,'sad')" class="sad"></div>
+                                <div dato-descripcion="It amazes me" (click)="commentLike(item._id,'amaze')" class="amaze"></div>
+                                <div dato-descripcion="I am glad" (click)="commentLike(item._id,'suprise')" class="suprise"></div>
+                            </div>
+                            <div class="pull-right">
+                                <div *ngIf="item.like > 0">
+                                    <span class='Selector selectorFace18 like18'></span>
+                                </div>
+                                <div *ngIf="item.love > 0">
+                                    <span class='Selector selectorFace18 love18'></span>
+                                </div>
+                                <div *ngIf="item.angry > 0">
+                                    <span class='Selector selectorFace18 angry18'></span>
+                                </div>
+                                <div *ngIf="item.scare > 0">
+                                    <span class='Selector selectorFace18 scare18'></span>
+                                </div>
+                                <div *ngIf="item.haha > 0">
+                                    <span class='Selector selectorFace18 haha18'></span>
+                                </div>
+                                <div *ngIf="item.sad > 0">
+                                    <span class='Selector selectorFace18 sad18'></span>
+                                </div>
+                                <div *ngIf="item.amaze > 0">
+                                    <span class='Selector selectorFace18 amaze18'></span>
+                                </div>
+                                <div *ngIf="item.suprise > 0">
+                                    <span class='Selector selectorFace18 suprise18'></span>
+                                </div>
+                                <div *ngIf="{ total: item.like + item.love + item.angry + item.scare + item.haha + item.haha + item.sad + item.amaze + item.suprise } as variable">
+                                    <span *ngIf="variable.total > 0">{{variable.total}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <subcomment [post]="parent_post" [sub_post]="sub_post"  [parent_comment]="item">
+
+                </subcomment>
+
+            </li>
+        </ul>
+        <ul class="comments-list">
+            <li>
+                <div class="media-left">
+                    <div class="comment-avatar"><img src="{{this.getUser().user_picture}}" alt=""></div>
+                </div>
+                <div class="comment-box">
+                    <form (ngSubmit)="submit(input.value)">
+                        <textarea name="comment_text" ng-trim="false" #input required class="form-control"  (keyup.enter)="submit(input.value,$event);input.value = ''" placeholder="What are you thinking?"></textarea>
+                    <button type="submit" style="display:none"></button>
+                    </form>
+                    <span class="text-danger">{{this.error}}</span>
+                    <span class="text-success">{{this.message}}</span>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

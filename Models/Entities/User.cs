@@ -63,19 +63,19 @@ namespace FindYourSoulMate.Models.Entities
         [Required(ErrorMessage = "Email is required")]
         public string email { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
-        [StringLength(50, ErrorMessage = "Must be between 5 and 50 characters", MinimumLength = 5)]
-        [DisplayName("Password*")]
-        [DataType(DataType.Password)]
-        [BsonIgnore]
-        public string password { get; set; }
+        //[Required(ErrorMessage = "Password is required")]
+        //[StringLength(50, ErrorMessage = "Must be between 5 and 50 characters", MinimumLength = 5)]
+        //[DisplayName("Password*")]
+        //[DataType(DataType.Password)]
+        //[BsonIgnore]
+        //public string password { get; set; }
 
-        [Required(ErrorMessage = "Confirm Password is required")]
-        [StringLength(50, ErrorMessage = "Must be between 5 and 50 characters", MinimumLength = 5)]
-        [DisplayName("Confirm Password*")]
-        [DataType(DataType.Password)]
-        [Compare("password")]
-        [BsonIgnore]
-        public string reenter_password { get; set; }
+        //[Required(ErrorMessage = "Confirm Password is required")]
+        //[StringLength(50, ErrorMessage = "Must be between 5 and 50 characters", MinimumLength = 5)]
+        //[DisplayName("Confirm Password*")]
+        //[DataType(DataType.Password)]
+        //[Compare("password")]
+        //[BsonIgnore]
+        //public string reenter_password { get; set; }
     }
 }

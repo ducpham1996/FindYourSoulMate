@@ -77,10 +77,31 @@ namespace FindYourSoulMate.Models.Manager
         public async Task insertLikeRecord(string post_id, Like_Record like_Record)
         {
             dataContext = new DataContext();
-            var comment_like_collection = dataContext.getConnection().GetCollection<Post_Like>("Post_Like");
+            var post_like_collection = dataContext.getConnection().GetCollection<Post_Like>("Post_Like");
             var filter = Builders<Post_Like>.Filter.Eq("_id", ObjectId.Parse(post_id));
             var update = Builders<Post_Like>.Update.AddToSet("like_records", like_Record);
-            await comment_like_collection.UpdateOneAsync(filter, update);
+            await post_like_collection.UpdateOneAsync(filter, update);
+        }
+
+        public async Task update_sub_post_like_count(string post_id, string sub_post_id, string emo, int value)
+        {
+            dataContext = new DataContext();
+            var post_collection = dataContext.getConnection().GetCollection<Post>("Post");
+            var filter = Builders<Post>.Filter.And(
+Builders<Post>.Filter.Where(x => x._id == post_id),
+Builders<Post>.Filter.Eq("video_image._id", sub_post_id));
+            PostManagement pm = new PostManagement();
+            Post sub_post = post_collection.AsQueryable().Where(p => p._id == post_id).
+                SelectMany(v => v.video_image).Where(i => i._id == sub_post_id).FirstOrDefault();
+            var update = Builders<Post>.Update.Set("video_image.$." + emo, getEmojiCount(sub_post, emo) + value);
+            await post_collection.FindOneAndUpdateAsync(filter, update);
+        }
+        public async Task remove_post_like(string _id)
+        {
+            dataContext = new DataContext();
+            var post_like_collection = dataContext.getConnection().GetCollection<Post_Like>("Post_Like");
+            var filter = Builders<Post_Like>.Filter.Eq("_id", ObjectId.Parse(_id));
+            await post_like_collection.DeleteOneAsync(filter);
         }
 
         private int getEmojiCount(Post p, string emo)

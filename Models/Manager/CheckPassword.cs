@@ -30,7 +30,6 @@ namespace FindYourSoulMate.Models
             catch(AggregateException ae)
             {
                 throw new AccountIsNotExistException("Your account is not exist");
-
             }
             byte[] salt = au.authorization.salt;
             byte[] key = au.authorization.key;

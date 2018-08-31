@@ -13,9 +13,8 @@ namespace FindYourSoulMate.Models.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string _id { get; set; }
 
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string participant_id { get; set; }
+        [BsonElement("participants")]
+        public List<Participant> participants { get; set; }
 
-        public bool status { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace FindYourSoulMate.Models.Manager
         }
         public async Task<Comment> insertComment(string post_id, Comment comment)
         {
+            PostParticipantManagement ppm = new PostParticipantManagement();
             var post_comments_collection = dataContext.getConnection().GetCollection<BsonDocument>("Post_Comment");
             var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(post_id));
             comment._id = ObjectId.GenerateNewId().ToString();
@@ -34,6 +35,12 @@ namespace FindYourSoulMate.Models.Manager
             var update = Builders<BsonDocument>.Update.AddToSet("comments", comment);
             await post_comments_collection.UpdateOneAsync(filter, update);
             await lm.insertCommentLike(new Comment_Like { comment_id = comment._id, like_Records = new List<Like_Record>() });
+            if(!ppm.has_participated(post_id, comment.owner._id))
+            {
+                await ppm.insertPostParticipantRecord(post_id, new Participant { _id = comment.owner._id, email = comment.owner.email, status = true });
+            }
+           //await ppm.send_email_to_participantsAsync(post_id, comment.owner._id,comment.owner.user_name,
+           //     comment.owner.user_name  + " has commented on ");
             return comment;
         }
         public IEnumerable<Comment> GetComments(string post_id, int take, int skip)
@@ -66,6 +73,7 @@ namespace FindYourSoulMate.Models.Manager
                  .Sort(new BsonDocument { { "comments.sub_comments.dateCreated", 1 } })
                  .Group("{_id: '$_id', 'comments': {'$push': '$comments.sub_comments'}}")
                  .Project("{'comments': { '$slice\' : ['$comments'," + skip + ", " + take + "] }}");
+            Debug.WriteLine(doc);
             var sub_comments = BsonSerializer.Deserialize<Post_Comment>(doc.SingleAsync().Result);
             List<Comment> comments = sub_comments.comments;
             foreach (Comment c in comments)
@@ -97,6 +105,7 @@ namespace FindYourSoulMate.Models.Manager
         }
         public async Task<Comment> insert_subCommentAsync(string post_id, string comment_id, Comment comment)
         {
+            PostParticipantManagement ppm = new PostParticipantManagement();
             comment._id = ObjectId.GenerateNewId().ToString();
             comment.sub_comments = null;
             var post_comments_collection = dataContext.getConnection().GetCollection<Post_Comment>("Post_Comment");
@@ -106,6 +115,10 @@ namespace FindYourSoulMate.Models.Manager
             var update = Builders<Post_Comment>.Update.Push("comments.$.sub_comments", comment);
             await post_comments_collection.FindOneAndUpdateAsync(filter, update);
             await lm.insertCommentLike(new Comment_Like { comment_id = comment._id, like_Records = new List<Like_Record>() });
+            if (!ppm.has_participated(post_id, comment.owner._id))
+            {
+                await ppm.insertPostParticipantRecord(post_id, new Participant { _id = comment.owner._id, email = comment.owner.email, status = true });
+            }
             return comment;
         }
 
@@ -167,27 +180,14 @@ namespace FindYourSoulMate.Models.Manager
             return BsonSerializer.Deserialize<Comment>(commentDoc);
         }
 
-        public async Task update_comment_count(string post_id, string comment_id, int mode)
+        public async Task update_comment_count(string post_id, string comment_id, int value)
         {
             var post_comments_collection = dataContext.getConnection().GetCollection<Post_Comment>("Post_Comment");
             var filter = Builders<Post_Comment>.Filter.And(
         Builders<Post_Comment>.Filter.Where(x => x.post_id == ObjectId.Parse(post_id)),
         Builders<Post_Comment>.Filter.Eq("comments._id", ObjectId.Parse(comment_id)));
-            if (mode == 0)
-            {
-                var update = Builders<Post_Comment>.Update.Set("comments.$.comments", getComment(post_id, comment_id).comments + 1);
-                await post_comments_collection.FindOneAndUpdateAsync(filter, update);
-            }
-            else
-            {
-                Comment c = getComment(post_id, comment_id);
-                if (c.comments > 0)
-                {
-                    var update = Builders<Post_Comment>.Update.Set("comments.$.comments", getComment(post_id, comment_id).comments - 1);
-                    await post_comments_collection.FindOneAndUpdateAsync(filter, update);
-                }
-            }
-
+            var update = Builders<Post_Comment>.Update.Set("comments.$.comments", getComment(post_id, comment_id).comments + value);
+            await post_comments_collection.FindOneAndUpdateAsync(filter, update);
         }
 
         public async Task update_commentAsync(string post_id, string comment_id, string comment_text)
@@ -208,7 +208,6 @@ namespace FindYourSoulMate.Models.Manager
             var update = Builders<Post_Comment>.Update.PullFilter("comments.$.sub_comments", Builders<Comment>.Filter.Eq("_id", ObjectId.Parse(sub_comment_id)));
             await post_comments_collection.UpdateOneAsync(filter, update);
             lm.removeCommentLike(sub_comment_id);
-            await pm.decrease_sub_commentsAsync(post_id, 1);
         }
 
         public async Task delete_commentAsync(string post_id, string comment_id)
@@ -223,7 +222,6 @@ namespace FindYourSoulMate.Models.Manager
             }
             lm.removeCommentLike(comment_id);
             await post_comments_collection.UpdateOneAsync(filter, update);
-            await pm.decrease_commentsAsync(post_id, 1);
         }
 
         //public int getCommentPosition(string post_id, string comment_id)
@@ -257,6 +255,11 @@ namespace FindYourSoulMate.Models.Manager
                 .Project("{ 'matchedIndex': { '$indexOfArray': [ '$sub_comments._id', ObjectId('" + sub_comment_id + "')]}}");
             return comment.SingleAsync().Result.GetValue(1).ToInt32();
         }
-
+        public async Task remove_post_comment(string _id)
+        {
+            var post_comments_collection = dataContext.getConnection().GetCollection<Post_Comment>("Post_Comment");
+            var filter = Builders<Post_Comment>.Filter.Eq("_id", ObjectId.Parse(_id));
+            await post_comments_collection.DeleteOneAsync(filter);
+        }
     }
 }

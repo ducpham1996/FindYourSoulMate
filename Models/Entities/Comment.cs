@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace FindYourSoulMate.Models
 {
+    [BsonIgnoreExtraElements]
     public class Comment
     {
         [BsonId]
@@ -66,6 +67,8 @@ namespace FindYourSoulMate.Models
         [BsonIgnore]
         public bool is_own { get; set; }
 
+        [BsonIgnore]
+        public int no_of_comment { get; set; }
 
     }
 }

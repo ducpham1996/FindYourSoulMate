@@ -1,0 +1,155 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.6" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Content Remove="ClientApp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\app\components\commentdisplay\comment.component.ts" />
+    <None Remove="ClientApp\app\components\editpost\editpost.component.ts" />
+    <None Remove="ClientApp\app\components\entities\comment.ts" />
+    <None Remove="ClientApp\app\components\entities\Owner.ts" />
+    <None Remove="ClientApp\app\components\entities\Post.ts" />
+    <None Remove="ClientApp\app\components\entities\Post_Submit.ts" />
+    <None Remove="ClientApp\app\components\entities\User.ts" />
+    <None Remove="ClientApp\app\components\home\comments.css" />
+    <None Remove="ClientApp\app\components\home\faceMocion.css" />
+    <None Remove="ClientApp\app\components\home\images-grid.css" />
+    <None Remove="ClientApp\app\components\home\modal.css" />
+    <None Remove="ClientApp\app\components\home\profile.css" />
+    <None Remove="ClientApp\app\components\login\login.component.ts" />
+    <None Remove="ClientApp\app\components\login\Login.ts" />
+    <None Remove="ClientApp\app\components\manager\checkcookie.service.ts" />
+    <None Remove="ClientApp\app\components\manager\comment.service.ts" />
+    <None Remove="ClientApp\app\components\manager\emoji.service.ts" />
+    <None Remove="ClientApp\app\components\manager\post.service.ts" />
+    <None Remove="ClientApp\app\components\manager\subcomment.service.ts" />
+    <None Remove="ClientApp\app\components\manager\user.service.ts" />
+    <None Remove="ClientApp\app\components\pipe\SafeHtmlPile.ts" />
+    <None Remove="ClientApp\app\components\postaction\postaction.component.ts" />
+    <None Remove="ClientApp\app\components\postdisplay\postdisplay.component.ts" />
+    <None Remove="ClientApp\app\components\postsubmit\postsubmit.component.ts" />
+    <None Remove="ClientApp\app\components\profile\profile.component.ts" />
+    <None Remove="ClientApp\app\components\register\register.component.ts" />
+    <None Remove="ClientApp\app\components\register\Register.ts" />
+    <None Remove="ClientApp\app\components\subcommentdisplay\subcomment.component.ts" />
+    <None Remove="ClientApp\app\components\subpost\subpost.component.ts" />
+    <None Remove="ClientApp\app\components\test\Login.ts" />
+    <None Remove="ClientApp\app\components\test\test.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\app\components\css\comments.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\app\components\css\faceMocion.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\app\components\css\images-grid.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\app\components\css\modal.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\app\components\css\profile.css">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\app\components\images\imgs-grid-icons.png" />
+    <Content Include="ClientApp\app\components\images\photo-grid-icons.png" />
+    <Content Include="ClientApp\app\components\images\sqhTN9lgaY1.png" />
+    <Content Include="ClientApp\app\components\images\sqhTN9lgaY1_size20px.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\commentdisplay\comment.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\editpost\editpost.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\Comment.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\Owner.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\Post.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\Post_Submit.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\User.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\login\login.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\Login.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\checkcookie.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\comment.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\emoji.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\post.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\register.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\subcomment.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\manager\user.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\pipe\SafeHtmlPile.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\postaction\postaction.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\postdisplay\postdisplay.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\postsubmit\postsubmit.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\profile\profile.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\register\register.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\entities\Register.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\subcommentdisplay\subcomment.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\subpost\subpost.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\test\test.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\test\Login.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\app\components\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\comments.css" />
+    <None Include="wwwroot\css\faceMocion.css" />
+    <None Include="wwwroot\css\images-grid.css" />
+    <None Include="wwwroot\css\modal.css" />
+    <None Include="wwwroot\css\profile.css" />
+  </ItemGroup>
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec Command="npm install" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="wwwroot\dist\**; ClientApp\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

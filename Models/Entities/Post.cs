@@ -13,18 +13,11 @@ namespace FindYourSoulMate.Models
     [BsonIgnoreExtraElements]
     public class Post
     {
-        [Key]
-        [BsonIgnore]
-        public string id { get; set; }
 
+        [Key]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string _id { get; set; }
-
-        [BsonElement("title")]
-        [Required(ErrorMessage = "Title is required")]
-        [DisplayName("Title")]
-        public string title { get; set; }
 
         [BsonElement("description")]
         [Required(ErrorMessage = "Description is required")]
@@ -32,6 +25,7 @@ namespace FindYourSoulMate.Models
         public string description { get; set; }
 
         [BsonElement("by")]
+        [BsonIgnoreIfNull]
         public Owner owner { get; set; }
 
         [BsonElement("dateCreated")]
@@ -44,12 +38,21 @@ namespace FindYourSoulMate.Models
 
         [BsonElement("video_image")]
         [BsonIgnoreIfNull]
-        public List<VideoImage> video_image { get; set; }
+        public List<Post> video_image { get; set; }
+
+        [BsonIgnoreIfNull]
+        [BsonElement("type")]
+        public string type { get; set; }
+        [BsonIgnoreIfNull]
+
+        [BsonElement("link")]
+        public string link { get; set; }
 
         [BsonElement("has_modified")]
         public bool has_modified { get; set; }
 
         [BsonElement("feeling")]
+        [BsonIgnoreIfNull]
         public string feeling { get; set; }
 
         [BsonElement("modify_date")]
@@ -91,6 +94,12 @@ namespace FindYourSoulMate.Models
 
         [BsonElement("status")]
         public int status { get; set; }
+
+        [BsonIgnore]
+        public string has_like { get; set; }
+        [BsonIgnore]
+        public int no_of_comment { get; set; }
+
     }
 
 

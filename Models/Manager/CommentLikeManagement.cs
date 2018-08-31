@@ -90,14 +90,14 @@ namespace FindYourSoulMate.Models.Manager
             await post_comments_collection.FindOneAndUpdateAsync(filter, update);
         }
 
-        public async Task update_sub_comment_likeAsync(string post_id, string comment_id, string sub_comment_id, string emo,int value)
+        public async Task update_sub_comment_likeAsync(string post_id, string comment_id, string sub_comment_id, string emo, int value)
         {
             CommentManagement cm = new CommentManagement();
             var post_comments_collection = dataContext.getConnection().GetCollection<Post_Comment>("Post_Comment");
             var filter = Builders<Post_Comment>.Filter.And(
         Builders<Post_Comment>.Filter.Where(x => x.post_id == ObjectId.Parse(post_id)),
         Builders<Post_Comment>.Filter.Eq("comments._id", ObjectId.Parse(comment_id)), Builders<Post_Comment>.Filter.Eq("comments.sub_comments._id", ObjectId.Parse(sub_comment_id)));
-            Comment c = cm.getSubComment(post_id,comment_id,sub_comment_id);
+            Comment c = cm.getSubComment(post_id, comment_id, sub_comment_id);
             var update = Builders<Post_Comment>.Update.Set("comments.$.sub_comments." +
                 cm.getSubCommentPosition(post_id, comment_id, sub_comment_id) +
                 "." + emo, getEmojiCount(c, emo) + value);

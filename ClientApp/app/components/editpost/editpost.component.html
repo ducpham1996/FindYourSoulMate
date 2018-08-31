@@ -1,0 +1,62 @@
+﻿<style>
+    .close_image_icon {
+        margin-left: -16px;
+        margin-top: -50px;
+        cursor: pointer;
+        position: relative;
+        z-index: 5;
+    }
+
+    .image_preview {
+        width: 80px;
+        height: 80px;
+        float: left;
+        margin-left: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+<div id="edit_post" class="modal" style="margin:150px auto" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Post</h5>
+                <button type="button" class="close" (click)="closeEditPostModal()" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="submitPostForm.form.valid && onSubmit(content.value)" #submitPostForm="ngForm" novalidate>
+                    <fieldset>
+                        <div class="form-group">
+                            <textarea #content class="form-control" name="content" placeholder="What are you thinking?">{{post.description}}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Images/Videos</label>
+                            <input #fileInput type="file" multiple ngModel class="form-control" name="image[]" accept="image/png, image/jpeg, image/gif , video/mp4" id="image"
+                                   (click)="fileInput.value = null;" (change)="onChange($event)">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="image_preview" *ngFor="let item of this.oldFiles; let i = index; ">
+                                <a class="close_image_icon" (click)="removeOldFile(i)"><i class='fa fa-close'></i></a>
+                                <img class="image_preview" *ngIf="item.type == 'image' " src="{{item.link}}">
+                                <video class="image_preview" *ngIf="item.type == 'video' " src="{{item.link}}"></video>
+                            </div>
+                            <div class="image_preview" *ngFor="let item of filelist; let i = index; ">
+                                <img class="image_preview" *ngIf="item != '' " id='img-upload' style="" [src]="item">
+                                <a class="close_image_icon" (click)="removeFile(i)"><i class='fa fa-close'></i></a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span class="text-success">{{this.message}}</span>
+                <span class="text-danger">{{this.error}}</span>
+                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                <button type="button" (click)="onSubmit(content.value)" class="btn btn-primary">Save changes</button>
+                <button type="button" (click)="closeEditPostModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

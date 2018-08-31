@@ -1,0 +1,129 @@
+﻿<div class="col-sm-6 col-sm-push-3" style="background-color:white">
+    <div id="post_container_" *ngFor="let item of this.posts ; let i = index;">
+        <div class="media">
+            <div class="media-left">
+                <img src="{{item.owner.user_picture}}" height="70" width="70" alt="{{item.owner.user_name}}">
+            </div>
+            <div class="media-body">
+                <h4 class="margin-t-0"><a>{{item.owner.user_name}}</a></h4>
+                <p><span class="glyphicon glyphicon-time"></span> {{item.date_created | timeAgo}}</p>
+            </div>
+        </div>
+        <div style="float:right;margin-top: -70px;" class="dropdown show">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a (click)="editPost(i)">Edit</a></li>
+                        <li><a href="">Turn off notification</a></li>
+                        <li><a href="">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a (click)="removePost(i)">Delete</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <!-- Image -->
+        <figure class="margin-b-2">
+            <div *ngIf="item.video_image != null">
+                <div class="imgs-grid imgs-grid-{{item.video_image.length}}">
+                    <div class="imgs-grid-image" (click)="viewSubPost(i,j)" *ngFor="let file of item.video_image | slice:0:4; let j = index;">
+                        <div class="image-wrap">
+                            <video preload="auto" autoplay *ngIf="file.type == 'video';else display_img" class="img-responsive" src="{{file.link}}" oncanplay="this.muted=true"></video>
+                            <ng-template #display_img>
+                                <img class="img-responsive" src="{{file.link}}" alt="" title="">
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="imgs-grid-image" (click)="viewSubPost(i,4)">
+                        <div class="image-wrap">
+                            <video preload="auto" autoplay *ngIf="item.video_image[4].type == 'video';else display_img" class="img-responsive" src="{{item.video_image[4].link}}" oncanplay="this.muted=true"></video>
+                            <ng-template #display_img>
+                                <img class="img-responsive" src="{{item.video_image[4].link}}" alt="" title="">
+                            </ng-template>
+                            <div class="view-all"><span class="view-all-cover"></span><span class="view-all-text">View all</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <figcaption class="margin-t-h"></figcaption>
+        </figure>
+        <p class="lead" style="word-wrap: break-word;white-space: pre-line;">{{item.description}}</p>
+        <div *ngIf="item.like > 0">
+            <span class='Selector selectorFace18 like18'></span>
+        </div>
+        <div *ngIf="item.love > 0">
+            <span class='Selector selectorFace18 love18'></span>
+        </div>
+        <div *ngIf="item.angry > 0">
+            <span class='Selector selectorFace18 angry18'></span>
+        </div>
+        <div *ngIf="item.scare > 0">
+            <span class='Selector selectorFace18 scare18'></span>
+        </div>
+        <div *ngIf="item.haha > 0">
+            <span class='Selector selectorFace18 haha18'></span>
+        </div>
+        <div *ngIf="item.sad > 0">
+            <span class='Selector selectorFace18 sad18'></span>
+        </div>
+        <div *ngIf="item.amaze > 0">
+            <span class='Selector selectorFace18 amaze18'></span>
+        </div>
+        <div *ngIf="item.suprise > 0">
+            <span class='Selector selectorFace18 suprise18'></span>
+        </div>
+        <div *ngIf="{ total: item.like + item.love + item.angry + item.scare + item.haha + item.haha + item.sad + item.amaze + item.suprise } as variable">
+            <span *ngIf="variable.total > 0">{{variable.total}}</span>
+        </div>
+        &emsp;
+        <p *ngIf="{ total_comment: item.comments + item.sub_comments  } as variable" class="pull-right">
+            {{variable.total_comment}} Comments
+        </p>
+        <form id="get_comment_form_" action="/commment/GetComments" method="post">
+            <input type="hidden" name="post_id" value="" />
+            <input id="no_of_comment_@encrypted_id" type="hidden" name="noOfcomment" value="" />
+            <input id="total_comment_@encrypted_id" type="hidden" value="@item.comments" />
+        </form>
+
+        <hr>
+        <postaction [displaycomment_component]="comment_display_component" [post]="item" [tmp_post]="item">
+
+        </postaction>
+        <hr />
+        <!-- Comments -->
+        <comment #comment_display_component [post]="item">
+
+        </comment>
+        <hr>
+        <h3>Leave a comment</h3>
+        <p>Please keep in mind that comments are moderated and rel="nofollow" is in use. So, please do not use a spammy keyword or a domain as your name, or else it will be deleted. Thank you!</p>
+
+        <div class="well" style="display:none">
+            <form id="comment_form" action="/Comment/Create" method="post">
+                <div class="form-group">
+                    <label for="contactName">Name</label>
+                    <input type="email" class="form-control" id="contactName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email</label>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="Enter email">
+                    <p class="help-block">Make sure you use a valid email address</p>
+                </div>
+                <div class="form-group">
+                    <label for="contactComment">Comment</label>
+                    <input type="hidden" name="post_id" value="@encrypted_id" />
+                    <textarea class="form-control" required name="comment_text" id="contactComment" placeholder="What are you thinking?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+        <!-- Pager -->
+        <nav>
+            <ul class="pager">
+                <li class="previous"><a href="#"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Older</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

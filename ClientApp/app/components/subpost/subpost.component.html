@@ -1,0 +1,91 @@
+﻿<div id="sub_post_modal" class="modal">
+    <span class="close cursor" (click)="closeModal()">&times;</span>
+    <div class="modal-content">
+        <div class="col-sm-7">
+            <div class="mySlides" style="display:block">
+                <div id="modal_post_content"></div>
+                <video id="sub_post_video" autoplay controls style='width: 100%;height:300px' *ngIf="sub_post.type == 'video';else display_img" class="img-responsive" src="{{sub_post.link}}"></video>
+                <ng-template #display_img>
+                    <img style='width: 100%;height:300px' class="img-responsive" src="{{sub_post.link}}" alt="" title="">
+                </ng-template>
+            </div>
+            <a *ngIf="prev" (click)="backward()" class="prev" onclick="">&#10094;</a>
+            <a *ngIf="next" (click)="forward()" class="next" onclick="">&#10095;</a>
+
+            <div style="height:100px">
+                <div class='column' *ngFor="let item of this.preview | slice:1; let i = index;">
+                    <div class='imgs-grid imgs-grid-1'>
+                        <div class='imgs-grid-image'>
+                            <div class='image-wrap' *ngIf="i == 0">
+                                <video autoplay oncanplay="this.muted=true" *ngIf="item.type == 'video';else display_img" class="demo cursor" style="width:100%;height:80px" src="{{item.link}}"></video>
+                                <ng-template #display_img>
+                                    <img class="demo cursor" style="width:100%;height:80px" src="{{item.link}}" alt="" title="">
+                                </ng-template>
+                                <div class="view-all"><span class="view-all-cover"></span><span class="view-all-text">Viewing</span></div>
+                            </div>
+                            <div *ngIf="i != 0" class='image-wrap' (click)="getSubPost(this.parent_post._id,item._id)">
+                                <video autoplay oncanplay="this.muted=true" *ngIf="item.type == 'video';else display_img" class="demo cursor" style="width:100%;height:80px" src="{{item.link}}"></video>
+                                <ng-template #display_img>
+                                    <img class="demo cursor" style="width:100%;height:80px" src="{{item.link}}" alt="" title="">
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="media-left">
+                <div class="media-left">
+                    <img id="owner_img" src="{{parent_post.owner.user_picture}}" height="70" width="70" alt="e">
+                </div>
+                <div class="media-body">
+                    <h4 class="margin-t-0"><a>{{parent_post.owner.user_name}}</a></h4>
+                    <p><span class="glyphicon glyphicon-time"></span> {{parent_post.date_created | timeAgo}}</p>
+                </div>
+            </div>
+            <hr />
+            <postaction [displaycomment_component]="comment_display_component" [post]="parent_post" [sub_post]="sub_post" [tmp_post]="sub_post">
+
+            </postaction>
+            <hr />
+            <div class="pull-left">
+                <div *ngIf="sub_post.like > 0">
+                    <span class='Selector selectorFace18 like18'></span>
+                </div>
+                <div *ngIf="sub_post.love > 0">
+                    <span class='Selector selectorFace18 love18'></span>
+                </div>
+                <div *ngIf="sub_post.angry > 0">
+                    <span class='Selector selectorFace18 angry18'></span>
+                </div>
+                <div *ngIf="sub_post.scare > 0">
+                    <span class='Selector selectorFace18 scare18'></span>
+                </div>
+                <div *ngIf="sub_post.haha > 0">
+                    <span class='Selector selectorFace18 haha18'></span>
+                </div>
+                <div *ngIf="sub_post.sad > 0">
+                    <span class='Selector selectorFace18 sad18'></span>
+                </div>
+                <div *ngIf="sub_post.amaze > 0">
+                    <span class='Selector selectorFace18 amaze18'></span>
+                </div>
+                <div *ngIf="sub_post.suprise > 0">
+                    <span class='Selector selectorFace18 suprise18'></span>
+                </div>
+                <div *ngIf="{ total: sub_post.like + sub_post.love + sub_post.angry + sub_post.scare + sub_post.haha + sub_post.haha + sub_post.sad + sub_post.amaze + sub_post.suprise } as variable">
+                    <span *ngIf="variable.total > 0">{{variable.total}}</span>
+                </div>
+            </div>        
+            &emsp;
+            <p *ngIf="{ total_comment: sub_post.comments + sub_post.sub_comments  } as variable" class="pull-right">
+                {{variable.total_comment}} Comments
+            </p>
+            <hr />
+            <comment #comment_display_component [post]="parent_post" [sub_post]="sub_post">
+
+            </comment>
+        </div>
+    </div>
+</div>

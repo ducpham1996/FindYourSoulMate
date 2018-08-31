@@ -12,14 +12,14 @@ namespace FindYourSoulMate.Models.Entities
         [DisplayName("Email*")]
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string email { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
         [StringLength(50, ErrorMessage = "Must be between 5 and 50 characters", MinimumLength = 5)]
         [DisplayName("Password*")]
         [DataType(DataType.Password)]
-        public string password { get; set; }
+        public string PassWord { get; set; }
 
-        public bool remember { get; set; }
+        public bool Is_Remember { get; set; }
     }
 }

@@ -49,11 +49,6 @@ namespace FindYourSoulMate.Models
             //var aPost = posts.AsQueryable<Post>().ToArray().Where(p => p._id.Equals(ObjectId.Parse("5b00ce7afcb00a38b09e2365"))).ToArray();
             
             //await posts.InsertOneAsync(new Post { title = "test", description = "testing", by = "me", url = "google.com" });
-            foreach (Post p in posts.AsQueryable<Post>().ToArray())
-            {
-                Debug.WriteLine("Title: " + p.title);
-            
-            }
         }
     }
 }

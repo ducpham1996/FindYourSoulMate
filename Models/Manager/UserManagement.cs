@@ -8,46 +8,40 @@ using MongoDB.Driver;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using MongoDB.Bson;
+using FindYourSoulMateAngular.Controllers;
+using Newtonsoft.Json;
 
 namespace FindYourSoulMate.Models.Manager
 {
     public class UserManagement
     {
         DataContext dataContext;
+        Helper _helper;
         public UserManagement()
         {
             dataContext = new DataContext();
+            _helper = new Helper();
         }
 
-        public Owner GetUser_Session(HttpRequest request)
+        public Owner GetUser_Cookie(HttpRequest request)
         {
-            Owner user_Session = new Owner();
-            foreach (var claim in request.HttpContext.User.Claims)
-            {
-                if (claim.Type == ClaimTypes.PrimarySid)
-                {
-                    user_Session._id = claim.Value;
-                }
-                if (claim.Type == ClaimTypes.Email)
-                {
-                    user_Session.email = claim.Value;
-                }
-                if (claim.Type == ClaimTypes.Name)
-                {
-                    user_Session.user_name = claim.Value;
-                }
-                if (claim.Type == ClaimTypes.Actor)
-                {
-                    user_Session.user_picture = claim.Value;
-                }
-            }
-            return user_Session;
+            Cookie cookie = JsonConvert.DeserializeObject<Cookie>(request.Cookies["User"]);
+            Owner author = cookie.value.data;
+            author._id = _helper.DecodeFrom64(author._id);
+            return author;
         }
         public User GetUser_Detail(string _id)
         {
             var user_collection = dataContext.getConnection().GetCollection<User_Authorization>("User");
             User user = user_collection.AsQueryable().Where(x => x._id == ObjectId.Parse(_id)).Select(x => x.user).First();
             return user;
+        }
+        public List<Post> getUserPosts(string user_id)
+        {
+            var post_collection = dataContext.getConnection().GetCollection<Post>("Post");
+            var filter = Builders<Post>.Filter.Where(x => x.owner._id == user_id);
+            var posts = post_collection.Find(filter).ToEnumerable().ToList();
+            return posts;
         }
 
     }

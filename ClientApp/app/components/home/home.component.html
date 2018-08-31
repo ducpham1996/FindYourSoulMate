@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://momentjs.com/downloads/moment.js"></script>
+
+<div class="container-fluid">
+    <div class="row" style="margin-top:60px">
+        <postsubmit>
+        </postsubmit>
+    </div>
+    <div class="row">
+        <postdisplay [subpost_display_component]="subpost_display_component" [edit_post_component]="editpost_component"></postdisplay>
+        <div class="col-sm-3 col-sm-pull-6">
+            <!-- list group -->
+            <div class="list-group margin-b-3">
+                <a href="#" class="active list-group-item">Category 1</a>
+                <a href="#" class="list-group-item">Category 2</a>
+                <a href="#" class="list-group-item">Category 3</a>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-3">
+            <!-- Search -->
+            <div class="well">
+                <h4 class="margin-t-0">Search</h4>
+                <form action="#">
+                    <div class="input-group">
+                        <label class="sr-only" for="search-form">Search the site</label>
+                        <input type="text" class="form-control" id="search-form">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- list group -->
+            <div class="list-group margin-b-3">
+                <a href="#" class="active list-group-item">Category 1</a>
+                <a href="#" class="list-group-item">Category 2</a>
+                <a href="#" class="list-group-item">Category 3</a>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+            <!-- Panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sidebar panel widget</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<subpost #subpost_display_component>
+</subpost>
+<editpost #editpost_component>
+</editpost>
